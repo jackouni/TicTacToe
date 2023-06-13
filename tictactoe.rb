@@ -35,7 +35,8 @@ class Player
     end 
 
     def place_piece(board) # Behaviour that allows players to place their pieces
-        puts "Please enter a position that is available on the board!"
+        puts ""
+        puts "#{@name} enter a position that is available on the board!"
         puts "Options include: #{board}"
         loop do
             position = gets.chomp.to_s.upcase
@@ -43,16 +44,24 @@ class Player
             if board.include?(position)
                 board.delete(position)
                 @board_occupied.push(position)
+                puts ""
                 puts "Current board: #{board}"
                 puts "Positions #{@name} occupies: #{@board_occupied}"
                 break
             else 
+                puts ""
                 puts "Sorry, that's not a position on the board."
                 puts "Please select/type a position from the options available:\n #{board}"
             end  
         end 
     end
-    def forfeit # Behaviour that allows players to forfeit the game
+end 
+
+def tie?(board)
+    if board == []
+        puts ""
+        puts "Tie game, no one wins."
+        return true
     end 
 end 
 
@@ -63,6 +72,7 @@ def input_p1_name
 end 
 
 def input_p2_name
+    puts ""
     puts "Player 2, enter the name you want to be referred by:"
     user_name = gets.chomp.to_s.capitalize
     return user_name
@@ -73,9 +83,15 @@ end
 player1 = Player.new(input_p1_name(), "x")
 player2 = Player.new(input_p2_name(), "y")
 players = [player1, player2]
-players[0].place_piece(board)
-players[0].place_piece(board)
-players[0].place_piece(board)
-players[0].place_piece(board)
-players[0].place_piece(board)
-player1.win?(win_positions)
+
+
+catch(:game_loop) do # Game loop
+    loop do
+        players.each do |player|
+            player.place_piece(board) 
+            throw(:game_loop) if player.win?(win_positions) == true
+            throw(:game_loop) if tie?(board) == true 
+            end 
+        end
+    end 
+ 
