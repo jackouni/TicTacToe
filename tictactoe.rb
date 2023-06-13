@@ -16,16 +16,23 @@ win_positions = [
 ]
 
 class Player
-    attr_reader :board_occupied
-
-    #private
 
     def initialize(name, symbol)
         @name = name
         @symbol = symbol.upcase
         @board_occupied = []
-        @turn = false
     end  
+
+    def win?(win_positions) # Checks to see if a player has a winning position
+        win_positions.each do |win_position|
+            board_occupied_matches = (win_position & @board_occupied).sort
+            if board_occupied_matches == win_position
+                puts "#{@name} has a win with positions: #{board_occupied_matches.flatten}"
+                puts "#{@name} wins the game!"
+                return true 
+            end 
+        end 
+    end 
 
     def place_piece(board) # Behaviour that allows players to place their pieces
         puts "Please enter a position that is available on the board!"
@@ -44,6 +51,8 @@ class Player
                 puts "Please select/type a position from the options available:\n #{board}"
             end  
         end 
+    end
+    def forfeit # Behaviour that allows players to forfeit the game
     end 
 end 
 
@@ -59,12 +68,14 @@ def input_p2_name
     return user_name
 end 
 
+# --- GAMEPLAY --- #
 
-# Game Loop
-    player1 = Player.new(input_p1_name(), "x")
-    player2 = Player.new(input_p2_name(), "y")
-    players = [player1, player2]
-
-    players[0].place_piece(board)
-
-
+player1 = Player.new(input_p1_name(), "x")
+player2 = Player.new(input_p2_name(), "y")
+players = [player1, player2]
+players[0].place_piece(board)
+players[0].place_piece(board)
+players[0].place_piece(board)
+players[0].place_piece(board)
+players[0].place_piece(board)
+player1.win?(win_positions)
