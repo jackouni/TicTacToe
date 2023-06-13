@@ -1,10 +1,10 @@
-board = [              # Positions available on the board 
+board = [             
     "A1", "B1", "C1",
     "A2", "B2", "C2",
     "A3", "B3", "C3"
 ]
 
-win_positions = [       # Possible Winning Positions
+win_positions = [ 
     ["A1", "B1", "C1"],
     ["A2", "B2", "C2"],
     ["A3", "B3", "C3"],
@@ -16,10 +16,7 @@ win_positions = [       # Possible Winning Positions
 ]
 
 class Player
-    @@number_of_players = 0
-    def self.get_number_of_players
-        return @@number_of_players
-    end 
+    attr_reader :board_occupied
 
     #private
 
@@ -28,7 +25,6 @@ class Player
         @symbol = symbol.upcase
         @board_occupied = []
         @turn = false
-        @@number_of_players += 1
     end  
 
     def place_piece(board) # Behaviour that allows players to place their pieces
@@ -41,7 +37,7 @@ class Player
                 board.delete(position)
                 @board_occupied.push(position)
                 puts "Current board: #{board}"
-                puts "Positions you occupy: #{@board_occupied}"
+                puts "Positions #{@name} occupies: #{@board_occupied}"
                 break
             else 
                 puts "Sorry, that's not a position on the board."
@@ -49,10 +45,26 @@ class Player
             end  
         end 
     end 
-
 end 
 
-player1 = Player.new("Jay", "x")
-player2 = Player.new("Joe", "y")
+def input_p1_name
+    puts "Player 1, enter the name you want to be referred by:"
+    user_name = gets.chomp.to_s.capitalize
+    return user_name
+end 
 
-player1.place_piece(board)
+def input_p2_name
+    puts "Player 2, enter the name you want to be referred by:"
+    user_name = gets.chomp.to_s.capitalize
+    return user_name
+end 
+
+
+# Game Loop
+    player1 = Player.new(input_p1_name(), "x")
+    player2 = Player.new(input_p2_name(), "y")
+    players = [player1, player2]
+
+    players[0].place_piece(board)
+
+
